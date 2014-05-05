@@ -15,7 +15,7 @@
 
 @interface CardGameViewController ()
 
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+@property (strong, nonatomic) IBOutletCollection(UIView) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
 @end
@@ -26,7 +26,7 @@
 // Update the UI whenever the view is loaded.
 - (void)viewDidLoad
 {
-    [self updateUI];
+    [self initUI];
 }
 
 
@@ -43,13 +43,17 @@
 - (IBAction)touchRedealButton {
     _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count] usingDeck:[self createDeck]];
     
-    [self updateUI];
+    [self initUI];
     
 }
 
 // This method takes care of the actions required when a user turns over a card.
 - (IBAction)touchCardButton:(UIButton *)sender
 {
+    if([sender isSelected]){
+    NSLog(@"HI :)");
+    }
+    else NSLog(@"BYE :(");
     NSUInteger cardIndex = [self.cardButtons indexOfObject:sender];
     
     [self.game chooseCardAtIndex:cardIndex];
@@ -57,7 +61,7 @@
     Card *card = [self.game cardAtIndex:cardIndex];
     
     // Updates the UI
-    [self updateUI];
+    //[self updateUI];
     
     if (self.game.shouldMatch) {
         self.game.cardsInPlay = nil;
@@ -68,19 +72,30 @@
     }
 }
 
+- (void)setSender:(UIView *)sender cardVal:(Card *)card
+{
+
+}
+
 // This method updates the UI and returns a boolean value to let the touchCardButton method know whether it should keep the most recent card or not.
-- (void)updateUI
+- (void)initUI
 {
     
     // Updates every button on the screen
-    for (UIButton *cardButton in self.cardButtons) {
+    for (UIView *cardButton in self.cardButtons) {
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
         
-        [cardButton setAttributedTitle:[self attTitleForCard:card] forState:UIControlStateNormal];
+        [self setSender:cardButton cardVal:card];
         
-        [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
+        //[self setCardNeedsDisplaysetNeedsDisplay];
         
-        cardButton.enabled = card.isMatched ? NO : YES;
+        //[cardButton setAttributedTitle:[self attTitleForCard:card] forState:UIControlStateNormal];
+        
+        //[cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
+        
+        //cardButton.enabled = card.isMatched ? NO : YES;
+        
+       
     }
     
     // Updates scoreLabel

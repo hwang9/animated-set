@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		16EA0E3D191790DE00E8994A /* PlayingCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16EA0E3C191790DE00E8994A /* PlayingCardView.m */; };
 		BA0AEA91190658F700DA861A /* SetCard.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0AEA90190658F700DA861A /* SetCard.m */; };
 		BA0AEA941906908000DA861A /* SetDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0AEA931906908000DA861A /* SetDeck.m */; };
 		BA0AEA97190694F600DA861A /* SetGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0AEA96190694F600DA861A /* SetGameViewController.m */; };
@@ -43,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		16EA0E3B191790DE00E8994A /* PlayingCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingCardView.h; sourceTree = "<group>"; };
+		16EA0E3C191790DE00E8994A /* PlayingCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingCardView.m; sourceTree = "<group>"; };
 		BA0AEA8F190658F700DA861A /* SetCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCard.h; sourceTree = "<group>"; };
 		BA0AEA90190658F700DA861A /* SetCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCard.m; sourceTree = "<group>"; };
 		BA0AEA921906908000DA861A /* SetDeck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetDeck.h; sourceTree = "<group>"; };
@@ -209,6 +212,8 @@
 				BA70BF6418F7601800C7E15F /* PlayingCardGameViewController.m */,
 				BAADF7CD18EE24CE00BD1AD9 /* CardGameViewController.h */,
 				BAADF7CE18EE24CE00BD1AD9 /* CardGameViewController.m */,
+				16EA0E3B191790DE00E8994A /* PlayingCardView.h */,
+				16EA0E3C191790DE00E8994A /* PlayingCardView.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -323,6 +328,7 @@
 				BAADF7F218EE297000BD1AD9 /* Deck.m in Sources */,
 				BAADF7C918EE24CE00BD1AD9 /* CardGameAppDelegate.m in Sources */,
 				BAADF7CF18EE24CE00BD1AD9 /* CardGameViewController.m in Sources */,
+				16EA0E3D191790DE00E8994A /* PlayingCardView.m in Sources */,
 				BA0AEA91190658F700DA861A /* SetCard.m in Sources */,
 				BA8A460C18F4BD61001B411A /* CardMatchingGame.m in Sources */,
 				BAADF7F818EE2D0400BD1AD9 /* PlayingCardDeck.m in Sources */,

@@ -9,6 +9,7 @@
 #import "PlayingCardGameViewController.h"
 #import "PlayingCardDeck.h"
 #import "PlayingCard.h"
+#import "PlayingCardView.h"
 
 @interface PlayingCardGameViewController ()
 
@@ -59,6 +60,18 @@
 - (UIImage *)backgroundImageForCard:(Card *)card
 {
     return [UIImage imageNamed:card.isChosen ? @"cardfront" : @"cardback"];
+}
+
+// Overrides the superclass's method by providing the correct information about the current Card
+- (void)setSender:(PlayingCardView *)sender cardVal:(PlayingCard *)card
+{
+    PlayingCardView * theSender = (PlayingCardView *)sender;
+    theSender.faceUp = YES;
+    theSender.rank = card.rank;
+    theSender.suit = card.suit;
+    
+    [sender setNeedsDisplay];
+    
 }
 
 
