@@ -23,6 +23,11 @@
     return [[SetDeck alloc] init];
 }
 
+- (NSUInteger)numCardsAtStart
+{
+    return 12;
+}
+
 // Override the superclass's method by simply using the attributed string for the card, since this will always be displayed on the card
 - (NSAttributedString *)attTitleForCard:(Card *)card
 {

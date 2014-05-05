@@ -23,6 +23,11 @@
     return [[PlayingCardDeck alloc] init];
 }
 
+- (NSUInteger)numCardsAtStart
+{
+    return 16;
+}
+
 // Overrides the superclass's method by only presenting the card contents when the card is faceup (chosen). Returns an empty string otherwise.
 - (NSAttributedString *)attTitleForCard:(Card *)card
 {

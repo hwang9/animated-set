@@ -90,6 +90,11 @@ static const int COST_TO_CHOOSE = 1;
     }
 }
 
+- (NSUInteger)numCardsOnTable
+{
+    return [self.cards count];
+}
+
 // The following methods have not been changed from lecture.
 - (Card *)cardAtIndex:(NSUInteger)index
 {
@@ -102,9 +107,10 @@ static const int COST_TO_CHOOSE = 1;
 {
     self = [super init];
     
+    self.deck = deck;
     if (self && cardCount >= 2) {
         for (int i=0; i < cardCount; i++) {
-            Card *card = [deck drawRandomCard];
+            Card *card = [self.deck drawRandomCard];
             if (card) {
                 [self.cards addObject:card];
             } else {

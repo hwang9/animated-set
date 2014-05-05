@@ -18,6 +18,7 @@
 // The following two public method signatures are unchanged from lecture.
 - (void)chooseCardAtIndex:(NSUInteger)index;
 - (Card *)cardAtIndex:(NSUInteger)index;
+- (NSUInteger)numCardsOnTable;
 
 // Keeps track of the overall score
 @property (nonatomic, readonly) int gameScore;
@@ -30,6 +31,9 @@
 
 // Keeps track of the current cards in play (chosen but not matched). It's used to keep track of whether a matching decision should be made as well as which cards the matchingLabel should print.
 @property (nonatomic) NSMutableArray *cardsInPlay;
+
+// Current deck.
+@property (nonatomic) Deck *deck;
 
 
 @end

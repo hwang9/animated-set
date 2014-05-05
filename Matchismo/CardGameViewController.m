@@ -12,10 +12,14 @@
 //
 
 #import "CardGameViewController.h"
+#import "Grid.h"
 
 @interface CardGameViewController ()
 
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+
+@property (weak, nonatomic) IBOutlet UIView *buttonsView;
+@property (nonatomic) NSMutableArray *cardButtons;
+@property (nonatomic) Grid *buttonsGrid;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
 @end
@@ -29,26 +33,41 @@
     [self updateUI];
 }
 
+- (NSMutableArray *)cardButtons
+{
+    if (!_cardButtons) _cardButtons = [[NSMutableArray alloc] init];
+    return _cardButtons;
+}
+
+- (Grid *)buttonsGrid
+{
+    if(!_buttonsGrid) {
+        _buttonsGrid = [[Grid alloc] init];
+        _buttonsGrid.size = self.buttonsView.bounds.size;
+        _buttonsGrid.cellAspectRatio = 0.66;
+        _buttonsGrid.minimumNumberOfCells = [self numCardsAtStart];
+    }
+    return _buttonsGrid;
+}
+
 
 // Simple getter for the game property that includes lazy instantiation.
 - (CardMatchingGame *)game
 {
     if(!_game) {
-        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count] usingDeck:[self createDeck]];
+        _game = [[CardMatchingGame alloc] initWithCardCount:[self numCardsAtStart] usingDeck:[self createDeck]];
     }
     return _game;
 }
 
 // This method takes care of the resets needed when the Redeal button is pressed. It reinitializes the game and updates the UI.
 - (IBAction)touchRedealButton {
-    _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count] usingDeck:[self createDeck]];
+    _game = [[CardMatchingGame alloc] initWithCardCount:[self numCardsAtStart] usingDeck:[self createDeck]];
     
     [self updateUI];
     
 }
-
-// This method takes care of the actions required when a user turns over a card.
-- (IBAction)touchCardButton:(UIButton *)sender
+- (IBAction)touchCardButton:(UITapGestureRecognizer *)sender
 {
     NSUInteger cardIndex = [self.cardButtons indexOfObject:sender];
     
@@ -71,16 +90,23 @@
 // This method updates the UI and returns a boolean value to let the touchCardButton method know whether it should keep the most recent card or not.
 - (void)updateUI
 {
+    self.buttonsGrid.minimumNumberOfCells = [self.game numCardsOnTable];
+    NSUInteger rowCount = [self.buttonsGrid rowCount];
+    NSUInteger colCount = [self.buttonsGrid columnCount];
     
     // Updates every button on the screen
-    for (UIButton *cardButton in self.cardButtons) {
-        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
+    for (int i=0; i<[self.game numCardsOnTable]; i++) {
+        UIButton *cardButton = [[UIButton alloc] initWithFrame:CGRectMake([self.buttonsGrid centerOfCellAtRow:i/rowCount inColumn:i%colCount].x, [self.buttonsGrid centerOfCellAtRow:i/rowCount inColumn:i%colCount].y, [self.buttonsGrid cellSize].width, [self.buttonsGrid cellSize].height)];
+        
+        Card *card = [self.game cardAtIndex:i];
         
         [cardButton setAttributedTitle:[self attTitleForCard:card] forState:UIControlStateNormal];
         
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         
         cardButton.enabled = card.isMatched ? NO : YES;
+        
+        [self.cardButtons addObject:cardButton];
     }
     
     // Updates scoreLabel
@@ -91,6 +117,11 @@
 - (Deck *)createDeck
 {
     return nil;
+}
+
+- (NSUInteger)numCardsAtStart
+{
+    return 0;
 }
 
 // Different games will want to express their titles differently. Keep this abstract.

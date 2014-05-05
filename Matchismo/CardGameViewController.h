@@ -15,6 +15,7 @@
 
 // abstract methods:
 - (Deck *)createDeck;
+- (NSUInteger)numCardsAtStart;
 - (NSAttributedString *)attTitleForCard:(Card *)card;
 - (UIImage *)backgroundImageForCard:(Card *)card;
 
