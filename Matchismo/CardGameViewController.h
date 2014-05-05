@@ -16,12 +16,9 @@
 // abstract methods:
 - (Deck *)createDeck;
 - (NSAttributedString *)attTitleForCard:(Card *)card;
-- (NSAttributedString *)buildCardAttString:(Card *)card;
 - (UIImage *)backgroundImageForCard:(Card *)card;
 
-
-- (BOOL)updateUI;
-- (NSAttributedString *)getCardsInPlay;
+- (void)updateUI;
 
 @property (nonatomic, strong) CardMatchingGame *game;
 

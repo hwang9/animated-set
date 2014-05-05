@@ -51,9 +51,9 @@
     if ([card1 isKindOfClass:[SetCard class]] && [card2 isKindOfClass:[SetCard class]]) {
         SetCard *setCard1 = (SetCard *)card1;
         SetCard *setCard2 = (SetCard *)card2;
-        if ([self.symbol isEqualToString:setCard1.symbol]  && [self.symbol isEqualToString:setCard2.symbol])
+        if (self.symbol == setCard1.symbol && self.symbol == setCard2.symbol)
             ret = TRUE;
-        else if (![self.symbol isEqualToString:setCard1.symbol] && ![self.symbol isEqualToString:setCard2.symbol] && ![setCard1.symbol isEqualToString:setCard2.symbol])
+        else if (self.symbol != setCard1.symbol && self.symbol != setCard2.symbol && setCard1.symbol != setCard2.symbol)
             ret = TRUE;
     }
     return ret;
@@ -68,9 +68,9 @@
     if ([card1 isKindOfClass:[SetCard class]] && [card2 isKindOfClass:[SetCard class]]) {
         SetCard *setCard1 = (SetCard *)card1;
         SetCard *setCard2 = (SetCard *)card2;
-        if ([self.shading isEqualToNumber:setCard1.shading] && [self.shading isEqualToNumber:setCard2.shading])
+        if (self.shading == setCard1.shading && self.shading == setCard2.shading)
             ret = TRUE;
-        else if (![self.shading isEqualToNumber:setCard1.shading] && ![self.shading isEqualToNumber:setCard2.shading] && ![setCard1.shading isEqualToNumber:setCard2.shading])
+        else if (self.shading != setCard1.shading && self.shading != setCard2.shading && setCard1.shading != setCard2.shading)
             ret = TRUE;
     }
     return ret;
@@ -85,9 +85,9 @@
     if ([card1 isKindOfClass:[SetCard class]] && [card2 isKindOfClass:[SetCard class]]) {
         SetCard *setCard1 = (SetCard *)card1;
         SetCard *setCard2 = (SetCard *)card2;
-        if ((self.color == setCard1.color)  && (self.color == setCard2.color))
-            ret = TRUE;
-        else if ((self.color != setCard1.color) && (self.color !=setCard2.color) && (setCard1.color != setCard2.color))
+        if (self.color == setCard1.color && self.color == setCard2.color)
+        ret = TRUE;
+        else if (self.color != setCard1.color && self.color != setCard2.color && setCard1.color != setCard2.color)
             ret = TRUE;
     }
     return ret;
@@ -99,26 +99,8 @@
     return nil;
 }
 
-// A card can only have up to 3 symbols
+// A card can only have up to 3 types of each property
 + (NSUInteger)maxNumber
-{
-    return 3;
-}
-
-// Returns an array of the three valid symbols on a Set card.
-+ (NSArray *)validSymbols
-{
-    return @[@"▲", @"●", @"■"];
-}
-
-// Returns an array of the three valid shadings on a Set card.
-+ (NSArray *)validShadings
-{
-    return @[@0.0, @0.3, @1.0];
-}
-
-// A card can only have one of 3 different colors
-+ (NSUInteger)maxColor
 {
     return 3;
 }
