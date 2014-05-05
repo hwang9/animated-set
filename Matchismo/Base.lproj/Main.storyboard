@@ -4,22 +4,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller - 2-CARD MATCH-->
-        <scene sceneID="xK8-yN-h4b">
-            <objects>
-                <navigationController definesPresentationContext="YES" id="f3j-Sl-OH6" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="2-CARD MATCH" id="S3B-Ea-5Yq"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="I7n-F2-gO9">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="v90-WN-H4F"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="PGb-yF-qwO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="86" y="-22"/>
-        </scene>
         <!--Set Game View Controller - SET-->
         <scene sceneID="DcS-Mt-KaR">
             <objects>
@@ -194,13 +178,6 @@
                                     <action selector="touchRedealButton" destination="q8l-YV-QRb" eventType="touchUpInside" id="qi6-Mz-ujr"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SGp-JH-Z9T">
-                                <rect key="frame" x="24" y="468" width="272" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I01-q6-Zmx">
                                 <rect key="frame" x="236" y="75" width="64" height="96"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -220,15 +197,10 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="SET" id="B5R-aQ-8Kf"/>
                     <navigationItem key="navigationItem" title="SET" id="YQ8-b9-Mhs">
-                        <barButtonItem key="rightBarButtonItem" title="History" id="ffb-dB-B9s">
-                            <connections>
-                                <segue destination="s8O-5H-hhh" kind="push" id="Rre-Ue-Eyo"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="History" id="ffb-dB-B9s"/>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="matchingLabel" destination="SGp-JH-Z9T" id="A7i-pv-06y"/>
                         <outlet property="scoreLabel" destination="b7w-WL-1Mt" id="uZK-WT-ijb"/>
                         <outletCollection property="cardButtons" destination="GkC-cc-EsU" id="hoc-9R-GOc"/>
                         <outletCollection property="cardButtons" destination="WLq-PF-t3T" id="8CB-xR-AWI"/>
@@ -246,54 +218,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FWU-GT-Sla" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="710" y="-733"/>
-        </scene>
-        <!--Card Game History View Controller - History-->
-        <scene sceneID="hlZ-T4-a0K">
-            <objects>
-                <viewController id="s8O-5H-hhh" customClass="CardGameHistoryViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="jku-q0-Fdr"/>
-                        <viewControllerLayoutGuide type="bottom" id="CiQ-XG-u6C"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="SCj-vG-ay3">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ufo-LJ-nkU">
-                                <rect key="frame" x="32" y="84" width="256" height="400"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="History" id="6gp-eD-IcG"/>
-                    <connections>
-                        <outlet property="textView" destination="ufo-LJ-nkU" id="bgT-ao-Xnu"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="z8z-I9-VxL" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1197" y="-425"/>
-        </scene>
-        <!--Navigation Controller - SET-->
-        <scene sceneID="DTO-rw-fjN">
-            <objects>
-                <navigationController definesPresentationContext="YES" id="7xO-zz-K8l" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="SET" id="XhM-et-rpE"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fqo-PQ-F4a">
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="q8l-YV-QRb" kind="relationship" relationship="rootViewController" id="F62-pP-11n"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RAb-If-lSq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="86" y="-687"/>
+            <point key="canvasLocation" x="86" y="-759"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="8RQ-Dt-jNS">
@@ -306,8 +231,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="7xO-zz-K8l" kind="relationship" relationship="viewControllers" id="SzS-gR-ynK"/>
-                        <segue destination="f3j-Sl-OH6" kind="relationship" relationship="viewControllers" id="8bI-gw-Fqy"/>
+                        <segue destination="q8l-YV-QRb" kind="relationship" relationship="viewControllers" id="xcw-Ce-RYa"/>
+                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="viewControllers" id="GXw-Qu-qXK"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g0Y-Dy-hjh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -535,27 +460,15 @@
                                     <action selector="touchRedealButton" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dhh-4l-2MG"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bqG-iO-sVE">
-                                <rect key="frame" x="20" y="474" width="272" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.60559555476871219" green="1" blue="0.11959488094700355" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="2-CARD MATCH" id="y1e-xe-QY9"/>
                     <navigationItem key="navigationItem" title="2-CARD MATCH" id="5hu-mu-RE7">
-                        <barButtonItem key="rightBarButtonItem" title="History" id="Zcn-fD-5eD">
-                            <connections>
-                                <segue destination="s8O-5H-hhh" kind="push" id="jnT-Xf-PNW"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="History" id="Zcn-fD-5eD"/>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="matchingLabel" destination="bqG-iO-sVE" id="cUr-CP-bcu"/>
                         <outlet property="scoreLabel" destination="arl-MX-iqo" id="qaW-9E-Hhu"/>
                         <outletCollection property="cardButtons" destination="dRQ-eB-b9I" id="nQx-Fo-tMH"/>
                         <outletCollection property="cardButtons" destination="riY-JQ-IgF" id="aXb-Mt-eOt"/>
@@ -577,7 +490,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="710" y="-68"/>
+            <point key="canvasLocation" x="86" y="-92"/>
         </scene>
     </scenes>
     <resources>
@@ -589,7 +502,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="jnT-Xf-PNW"/>
-    </inferredMetricsTieBreakers>
 </document>

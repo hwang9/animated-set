@@ -32,7 +32,7 @@
         return [[NSAttributedString alloc] initWithString:@""];
 }
 
-// Overrides the superclass's method by building an appropriate title for a playing card. An NSAttributedString is used to ensure that the suits reflect their appropriate colors (hearts and diamonds are red, while clubs and spades are black)
+// Builds an appropriate title for a playing card. An NSAttributedString is used to ensure that the suits reflect their appropriate colors (hearts and diamonds are red, while clubs and spades are black)
 - (NSAttributedString *)buildCardAttString:(Card *)card
 {
     NSMutableAttributedString *ret;

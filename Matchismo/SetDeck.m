@@ -18,9 +18,9 @@
     
     if (self) {
         for (NSUInteger num = 1; num <= [SetCard maxNumber]; num++) {
-            for (NSString *symbol in [SetCard validSymbols]) {
-                for (NSNumber *shading in [SetCard validShadings]) {
-                    for (NSUInteger color = 1; color <= [SetCard maxColor]; color++) {
+            for (NSUInteger symbol = 1; symbol <= [SetCard maxNumber]; symbol++) {
+                for (NSUInteger shading = 1; shading <= [SetCard maxNumber]; shading++) {
+                    for (NSUInteger color = 1; color <= [SetCard maxNumber]; color++) {
                         SetCard *card = [[SetCard alloc] init];
                         card.number = num;
                         card.symbol = symbol;
