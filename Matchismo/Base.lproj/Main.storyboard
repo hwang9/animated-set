@@ -54,7 +54,7 @@
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="buttonsView" destination="v0I-ez-tcV" id="UuM-zX-ZQE"/>
+                        <outlet property="cardsView" destination="v0I-ez-tcV" id="SoO-cF-JqV"/>
                         <outlet property="scoreLabel" destination="b7w-WL-1Mt" id="uZK-WT-ijb"/>
                     </connections>
                 </viewController>
@@ -133,7 +133,7 @@
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="buttonsView" destination="Q4y-ol-VGh" id="oOf-S4-PzH"/>
+                        <outlet property="cardsView" destination="Q4y-ol-VGh" id="hvt-bd-EnQ"/>
                         <outlet property="scoreLabel" destination="arl-MX-iqo" id="qaW-9E-Hhu"/>
                     </connections>
                 </viewController>

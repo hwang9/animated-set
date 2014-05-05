@@ -17,9 +17,9 @@
 @interface CardGameViewController ()
 
 
-@property (weak, nonatomic) IBOutlet UIView *buttonsView;
+@property (weak, nonatomic) IBOutlet UIView *cardsView;
 @property (nonatomic) NSMutableArray *cardButtons;
-@property (nonatomic) Grid *buttonsGrid;
+@property (nonatomic) Grid *cardsGrid;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
 @end
@@ -39,15 +39,15 @@
     return _cardButtons;
 }
 
-- (Grid *)buttonsGrid
+- (Grid *)cardsGrid
 {
-    if(!_buttonsGrid) {
-        _buttonsGrid = [[Grid alloc] init];
-        _buttonsGrid.size = self.buttonsView.bounds.size;
-        _buttonsGrid.cellAspectRatio = 0.66;
-        _buttonsGrid.minimumNumberOfCells = [self numCardsAtStart];
+    if(!_cardsGrid) {
+        _cardsGrid = [[Grid alloc] init];
+        _cardsGrid.size = self.cardsView.bounds.size;
+        _cardsGrid.cellAspectRatio = 0.66;
+        _cardsGrid.minimumNumberOfCells = [self numCardsAtStart];
     }
-    return _buttonsGrid;
+    return _cardsGrid;
 }
 
 
@@ -69,7 +69,8 @@
 }
 - (IBAction)touchCardButton:(UITapGestureRecognizer *)sender
 {
-    NSUInteger cardIndex = [self.cardButtons indexOfObject:sender];
+    //NSUInteger cardIndex = [self.cardButtons indexOfObject:sender];
+    NSUInteger cardIndex = 0;
     
     [self.game chooseCardAtIndex:cardIndex];
     
@@ -90,13 +91,13 @@
 // This method updates the UI and returns a boolean value to let the touchCardButton method know whether it should keep the most recent card or not.
 - (void)updateUI
 {
-    self.buttonsGrid.minimumNumberOfCells = [self.game numCardsOnTable];
-    NSUInteger rowCount = [self.buttonsGrid rowCount];
-    NSUInteger colCount = [self.buttonsGrid columnCount];
+    self.cardsGrid.minimumNumberOfCells = [self.game numCardsOnTable];
+    NSUInteger rowCount = [self.cardsGrid rowCount];
+    NSUInteger colCount = [self.cardsGrid columnCount];
     
     // Updates every button on the screen
     for (int i=0; i<[self.game numCardsOnTable]; i++) {
-        UIButton *cardButton = [[UIButton alloc] initWithFrame:CGRectMake([self.buttonsGrid centerOfCellAtRow:i/rowCount inColumn:i%colCount].x, [self.buttonsGrid centerOfCellAtRow:i/rowCount inColumn:i%colCount].y, [self.buttonsGrid cellSize].width, [self.buttonsGrid cellSize].height)];
+        UIButton *cardButton = [[UIButton alloc] initWithFrame:CGRectMake([self.cardsGrid frameOfCellAtRow:i/rowCount inColumn:i%colCount].origin.x, [self.cardsGrid frameOfCellAtRow:i/rowCount inColumn:i%colCount].origin.y, [self.cardsGrid cellSize].width, [self.cardsGrid cellSize].height)];
         
         Card *card = [self.game cardAtIndex:i];
         
@@ -107,6 +108,7 @@
         cardButton.enabled = card.isMatched ? NO : YES;
         
         [self.cardButtons addObject:cardButton];
+        [self.cardsView addSubview:cardButton];
     }
     
     // Updates scoreLabel
