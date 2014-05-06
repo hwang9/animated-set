@@ -20,9 +20,9 @@
 @property (strong, nonatomic) UIAttachmentBehavior *attachment;
 
 
-@property (nonatomic) Grid *cardsGrid;
-@property (nonatomic) UIView *pile;
-@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (nonatomic) Grid *cardsGrid;                       //grid to help position card buttons
+@property (nonatomic) UIView *pile;                          //view of the pile
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;    //label to display the score
 
 @end
 
@@ -35,11 +35,13 @@
     [self updateUI];
 }
 
+// Update UI when orientation is changed.
 - (void)viewDidLayoutSubviews
 {
     [self updateUI];
 }
 
+// Lazy instantiator for the animator
 - (UIDynamicAnimator *)animator
 {
     if (!_animator) {
@@ -53,35 +55,39 @@
     return _animator;
 }
 
+// Creates a card button, adds it to our array, and returns the newly created button
 - (UIView *)addCardButton
 {
-    //UIButton *cardButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     UIView *cardButton = [self returnBlankButton];
-    cardButton.frame = CGRectMake(0, 0, 0, 0);
+    cardButton.frame = CGRectMake(0, 0, 0, 0);        //all new buttons start at the upper left corner
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchCardButton:)];
     [cardButton addGestureRecognizer:tap];
+    
     [self.cardButtons addObject:cardButton];
     return cardButton;
 }
 
-- (UIView *) returnBlankButton
+// Adds the pan and tap gestures for the pile view.
+- (void)addGestures:(UIView *)pile
 {
-    return nil;
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    [pile addGestureRecognizer:panGesture];
+    [pile addGestureRecognizer:tapGesture];
 }
 
-
+// Lazy instantiator for the pile view. Create the button, add gesture recognizers, and return.
 - (UIView *)pile
 {
     if (!_pile) {
         _pile = [self returnBlankButton];
-        UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-        [_pile addGestureRecognizer:panGesture];
-        [_pile addGestureRecognizer:tapGesture];
+        [self addGestures:_pile];
     }
     return _pile;
 }
 
+// Lazy instantiator for the cardButtons array. Adds [self numCardsAtStart] cards to the array to begin with.
 - (NSMutableArray *)cardButtons
 {
     if (!_cardButtons) {
@@ -93,6 +99,7 @@
     return _cardButtons;
 }
 
+// Lazy instantiator for the cardsGrid grid. Sets bounds to our cardsView bounds and minimumNumberOfCells to the number of cards we start with. An aspect ratio of 2/3 seems to be appropriate for cards.
 - (Grid *)cardsGrid
 {
     if(!_cardsGrid) {
@@ -102,14 +109,6 @@
         _cardsGrid.minimumNumberOfCells = [self numCardsAtStart];
     }
     return _cardsGrid;
-}
-
-- (void)addGestures:(UIView *)pile
-{
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [pile addGestureRecognizer:panGesture];
-    [pile addGestureRecognizer:tapGesture];
 }
 
 
@@ -124,14 +123,21 @@
 
 // This method takes care of the resets needed when the Redeal button is pressed. It reinitializes the game and updates the UI.
 - (IBAction)touchRedealButton {
+    // Do not allow redeals when cards are in a pile
     if (self.isPile) return;
-    for (UIView *button in self.cardButtons) {
-        [UIView transitionWithView:button duration:0.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            button.frame = CGRectMake(0, 0, 0, 0);
-        } completion:^(BOOL finished){
-            [button removeFromSuperview];
-        }];
+    
+    for (UIView *button in self.cardButtons) {    //fade out all buttons on screen
+        [UIView transitionWithView:button
+                          duration:0.5
+                           options:UIViewAnimationOptionCurveEaseOut
+                        animations:^{
+                            button.frame = CGRectMake(0, 0, 0, 0);
+                        }
+                        completion:^(BOOL finished){
+                            [button removeFromSuperview];
+                        }];
     }
+    
     self.game = nil;
     self.cardsGrid = nil;
     self.cardButtons = nil;
@@ -139,15 +145,17 @@
     [self updateUI];
     
 }
+
+// Tap gesture recognizer for the card buttons.
 - (IBAction)touchCardButton:(UITapGestureRecognizer *)sender
 {
     NSUInteger cardIndex = [self.cardButtons indexOfObject:sender.view];
     
-    [self.game chooseCardAtIndex:cardIndex];
+    [self.game chooseCardAtIndex:cardIndex];  //Calls on the model to handle algorithms
     
-    // Updates the UI
-    [self updateUI];
+    [self updateUI];                          // Updates the UI
     
+    // If we have enough cards for a match, remove the cards from game.cardsInPlay. If a match was not found, add the last card back in.
     if (self.game.shouldMatch) {
         self.game.cardsInPlay = nil;
         if (self.game.matchScore <= 0) {
@@ -156,27 +164,37 @@
     }
 }
 
+// Returns the appropriate frame for the button at index.
 - (CGRect)getFrameAtIndex:(NSUInteger)index
 {
     self.cardsGrid.minimumNumberOfCells = [self.game numCardsOnTable];
     self.cardsGrid.size = self.cardsView.bounds.size;
     NSUInteger colCount = [self.cardsGrid columnCount];
+    
     return [self.cardsGrid frameOfCellAtRow:index/colCount inColumn:index%colCount];
 }
 
-// This method updates the UI and returns a boolean value to let the touchCardButton method know whether it should keep the most recent card or not.
+// Updates the UI
 - (void)updateUI
 {
     for (UIView *cardButton in self.cardButtons) {
         NSUInteger cardIndex = [self.cardButtons indexOfObject:cardButton];
-        [UIView transitionWithView:cardButton duration:0.5 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            cardButton.frame = [self getFrameAtIndex:cardIndex];
-        } completion:nil];
+        
+        // Move each button from where it is to where it should be.
+        [UIView transitionWithView:cardButton
+                          duration:0.5
+                           options:UIViewAnimationOptionCurveEaseIn
+                        animations:^{
+                            cardButton.frame = [self getFrameAtIndex:cardIndex];
+                        }
+                        completion:nil];
         
         Card *card = [self.game cardAtIndex:cardIndex];
         
+        // Updates the button in the subclasses.
         [self updateButton:cardButton inputCard:card];
         
+        // Disable all gesture recognizers when card is matched.
         if (card.isMatched) cardButton.gestureRecognizers = nil;
     }
     
@@ -184,85 +202,79 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"Score :%d", self.game.gameScore];
 }
 
-- (void)updateButton:(UIView *)cardButton inputCard:(Card *)card
-{
-}
-
+// Pinch gesture recognizer to put cards into a pile
 - (IBAction)combineCardsOnPinch:(UIPinchGestureRecognizer *)sender {
     
     self.isPile = TRUE;
+    
     if (sender.state == UIGestureRecognizerStateBegan) {
-        __block CGPoint center = [self.cardsView center];
-        __block NSUInteger width = 60;
-        __block NSUInteger height = 90;
+        CGPoint center = [self.cardsView center];
+        NSUInteger width = 60;
+        NSUInteger height = 90;
+        
         for (UIView *button in self.cardButtons) {
             width = button.frame.size.width;
             height = button.frame.size.height;
-            [UIView transitionWithView:button duration:0.3 options:UIViewAnimationOptionCurveLinear animations:^{
-                button.frame = CGRectMake(center.x - width/2, center.y - height/2, width, height);
-            }completion:^(BOOL finished){
-                if (finished) [button removeFromSuperview];
-            }];
+            
+            // Move all buttons to the center of the screen and remove from cardsView when the animation is done.
+            [UIView transitionWithView:button
+                              duration:0.3
+                               options:UIViewAnimationOptionCurveLinear
+                            animations:^{
+                                button.frame = CGRectMake(center.x - width/2, center.y - height/2, width, height);
+                            }
+                            completion:^(BOOL finished){
+                                if (finished) [button removeFromSuperview];
+                            }];
         }
+        
         self.pile.frame = CGRectMake(center.x - width/2, center.y - height/2, width, height);
         
+        // Draw the state of the first card (top of the pile) onto the pile
         Card *card = [self.game cardAtIndex:0];
-        
         [self updateButton:self.pile inputCard:card];
         
-        //[self.pile setAttributedTitle:[self attTitleForCard:card] forState:UIControlStateNormal];
-        
-        //[self.pile setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         [self.cardsView addSubview:self.pile];
     }
 }
 
-
+// Handles the pan gesture of the pile
 - (IBAction)handlePanGesture:(UIPanGestureRecognizer *)sender
 {
     CGPoint panPoint = [sender locationInView:self.cardsView];
     
     if (sender.state == UIGestureRecognizerStateBegan) {
-        [self attachPileToPoint:panPoint];
+        self.attachment = [[UIAttachmentBehavior alloc] initWithItem:self.pile attachedToAnchor:panPoint];
+        [self.animator addBehavior:self.attachment];
     } else if (sender.state == UIGestureRecognizerStateChanged) {
         self.attachment.anchorPoint = panPoint;
     } else if (sender.state == UIGestureRecognizerStateEnded) {
         [self.animator removeBehavior:self.attachment];
-        //self.cardsView.path = nil;
     }
 }
 
-- (void)attachPileToPoint:(CGPoint)anchorPoint
-{
-    if (self.pile) {
-        self.attachment = [[UIAttachmentBehavior alloc] initWithItem:self.pile attachedToAnchor:anchorPoint];
-        UIView *pile = self.pile;
-        //self.pile = nil;
-        __weak CardGameViewController *weakSelf = self;
-        self.attachment.action = ^{
-            UIBezierPath *path = [[UIBezierPath alloc] init];
-            [path moveToPoint:weakSelf.attachment.anchorPoint];
-            [path addLineToPoint:pile.center];
-            //weakSelf.cardsView.path = path;
-        };
-        [self.animator addBehavior:self.attachment];
-    }
-}
-
+// Handles the tap gesture of the pile
 - (IBAction)handleTapGesture:(UITapGestureRecognizer *)sender
 {
     CGPoint origin = self.pile.frame.origin;
     NSUInteger width = self.pile.frame.size.width;
     NSUInteger height = self.pile.frame.size.height;
+    
+    // Put all buttons back on the cardsView where the pile is
     for (UIView *button in self.cardButtons) {
         button.frame = CGRectMake(origin.x, origin.y, width, height);
         [self.cardsView addSubview:button];
     }
+    
     [self.pile removeFromSuperview];
     self.pile = nil;
     self.isPile = FALSE;
+    
+    // Let updateUI move the buttons back to their proper positions
     [self updateUI];
 }
+
+#pragma mark - Abstract methods
 
 // Different games have different decks. Keep this abstract.
 - (Deck *)createDeck
@@ -270,22 +282,22 @@
     return nil;
 }
 
+// Different games start with different layouts. Keep this abstract.
 - (NSUInteger)numCardsAtStart
 {
     return 0;
 }
 
-// Different games will want to express their titles differently. Keep this abstract.
-- (NSAttributedString *)attTitleForCard:(Card *)card
+// Returns a generic view for a card button. More specific games should override this.
+- (UIView *) returnBlankButton
 {
-    return nil;
+    return [[UIView alloc] init];
 }
 
-
-// Different games will require different background images. Keep this abstract.
-- (UIImage *)backgroundImageForCard:(Card *)card
+// Different games will update their buttons differently. Keep this abstract.
+- (void)updateButton:(UIView *)cardButton inputCard:(Card *)card
 {
-    return nil;
+    return;
 }
 
 

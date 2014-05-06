@@ -18,15 +18,11 @@
 
 #define CORNER_FONT_STANDARD_HEIGHT 180.0
 #define CORNER_RADIUS 12.0
-//#define CORNER_LINE_SPACING_REDUCTION 0.25
 
 - (CGFloat)cornerScaleFactor { return self.bounds.size.height / CORNER_FONT_STANDARD_HEIGHT; }
 - (CGFloat)cornerRadius { return CORNER_RADIUS * [self cornerScaleFactor]; }
-//- (CGFloat)cornerOffset { return [self cornerRadius] / 3.0;}
 
 
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
     UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:[self cornerRadius]];
@@ -46,19 +42,7 @@
     [self drawShapes];
 }
 
-/*- (void)pushContextAndRotateUpsideDown
-{
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(context);
-    CGContextTranslateCTM(context, self.bounds.size.width, self.bounds.size.height);
-    CGContextRotateCTM(context, M_PI);
-}
-
-- (void)popContext
-{
-    CGContextRestoreGState(UIGraphicsGetCurrentContext());
-}*/
-
+// Converts color code to appropriate card color (red, green, purple)
 - (UIColor *) returnSelfColor
 {
     if(self.color == 1) return [UIColor colorWithRed:1 green:0 blue:0 alpha:[self returnSelfShading]];
@@ -67,6 +51,7 @@
     return nil;
 }
 
+// Converts color code to appropriate stroke color
 - (UIColor *) returnSelfStrokeColor
 {
     if(self.color == 1) return [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
@@ -75,6 +60,7 @@
     return nil;
 }
 
+// Returns the proper shading for the card.
 - (CGFloat) returnSelfShading
 {
     if (self.shading == 1) return 0.0;
@@ -92,9 +78,9 @@
 #define RECTANGLE_HEIGHT_RATIO 0.150
 #define CONTROL_POINT_RATIO 2
 
+// Draws the shapes onto the card
 - (void)drawShapes
 {
-    
     CGFloat height = self.bounds.size.height;
     
     NSMutableArray * paths = [[NSMutableArray alloc]init];
@@ -104,6 +90,7 @@
         UIBezierPath *setPip = [self getBezierPath:y];
         if(setPip != nil) [paths addObject: setPip];
     }
+    
     for(UIBezierPath* pip in paths){
         [[self returnSelfColor] setFill];
         [pip fill];
@@ -111,15 +98,35 @@
         [[self returnSelfStrokeColor] setStroke];
         [pip stroke];
     }
-    
-    
-    
 }
 
+// Draws 10 vertical stripes inside "path", which starts at "origin" and has a size of "size"
+- (void)drawStripesWithPath:(UIBezierPath *)path
+                   AtOrigin:(CGPoint)origin
+                   WithSize:(CGSize)size
+{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    
+    [path addClip];
+    CGContextSetLineWidth(context, 0.5);
+    [[self returnSelfStrokeColor] set];
+    
+    for (CGFloat x = origin.x; x < origin.x + size.width; x += size.width/10) {
+        CGContextMoveToPoint(context, x, origin.y);
+        CGContextAddLineToPoint(context, x, origin.y + size.height);
+    }
+    
+    CGContextStrokePath(context);
+    CGContextRestoreGState(context);
+}
+
+// Draws each object given its appropriate vertical offset
 - (UIBezierPath *) getBezierPath:(CGFloat) y{
     CGFloat width = self.bounds.size.width;
     CGFloat height = self.bounds.size.height;
-    if(self.symbol == 1){
+    
+    if(self.symbol == 1){   //Draws a diamond
         UIBezierPath *setDiamond = [UIBezierPath bezierPath];
         
         CGFloat widthRatio = DIAMOND_HEIGHT_RATIO * width * 1.5;
@@ -136,27 +143,16 @@
         [setDiamond addLineToPoint:fourthPoint];
         [setDiamond closePath];
         
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSaveGState(context);
-        
-        [setDiamond addClip];
-        
-        if (self.shading == 2) {
-            CGContextSetLineWidth(context, 0.5);
-            [[self returnSelfStrokeColor] set];
-            for (CGFloat x = width/2 - widthRatio; x < width/2 + widthRatio; x += widthRatio/5) {
-                CGContextMoveToPoint(context, x, y - heightRatio);
-                CGContextAddLineToPoint(context, x, y + heightRatio);
-            }
+        if (self.shading == 2) {  //Draws stripes in the shape
+            CGPoint origin = CGPointMake(width/2-widthRatio, y - heightRatio);
+            CGSize size = CGSizeMake(widthRatio*2, heightRatio*2);
+            [self drawStripesWithPath:setDiamond AtOrigin:origin WithSize:size];
         }
-        
-        CGContextStrokePath(context);
-        CGContextRestoreGState(context);
         
         return setDiamond;
         
     }
-    else if(self.symbol == 2){
+    else if(self.symbol == 2){      //Draws an oval
         UIBezierPath *setOval = [UIBezierPath bezierPath];
         setOval.lineJoinStyle = kCGLineJoinRound;
         
@@ -166,31 +162,21 @@
         CGPoint firstPoint = CGPointMake(width/2 - widthRatio, y + heightRatio);
         CGPoint firstCenter = CGPointMake(width/2 - widthRatio, y);
         CGPoint secondCenter = CGPointMake(width/2 + widthRatio, y);
+        
         [setOval moveToPoint:firstPoint];
         [setOval addArcWithCenter:firstCenter radius:heightRatio startAngle: M_PI/2 endAngle: 3 * M_PI/2 clockwise:true];
         [setOval addArcWithCenter:secondCenter radius:heightRatio startAngle: 3 * M_PI/2 endAngle: M_PI/2 clockwise:true];
         [setOval closePath];
         
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSaveGState(context);
-        
-        [setOval addClip];
-        
-        if (self.shading == 2) {
-            CGContextSetLineWidth(context, 0.5);
-            [[self returnSelfStrokeColor] set];
-            for (CGFloat x = width/2 - widthRatio - heightRatio; x < width/2 + widthRatio + heightRatio; x += widthRatio/3) {
-                CGContextMoveToPoint(context, x, y - heightRatio);
-                CGContextAddLineToPoint(context, x, y + heightRatio);
-            }
+        if (self.shading == 2) {    //Draws stripes
+            CGPoint origin = CGPointMake(width/2-widthRatio-heightRatio, y - heightRatio);
+            CGSize size = CGSizeMake((widthRatio+heightRatio)*2, heightRatio*2);
+            [self drawStripesWithPath:setOval AtOrigin:origin WithSize:size];
         }
-        
-        CGContextStrokePath(context);
-        CGContextRestoreGState(context);
         
         return setOval;
     }
-    else if(self.symbol == 3){
+    else if(self.symbol == 3){    //Draws a squiggle
         UIBezierPath *setSquiggle = [UIBezierPath bezierPath];
         
         CGFloat widthRatio = RECTANGLE_WIDTH_RATIO * height / 2;
@@ -214,43 +200,17 @@
         [setSquiggle addCurveToPoint:thirdPoint controlPoint1:fourthControl controlPoint2:thirdControl];
         [setSquiggle closePath];
         
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSaveGState(context);
-        
-        [setSquiggle addClip];
-        
-        if (self.shading == 2) {
-            CGContextSetLineWidth(context, 0.5);
-            [[self returnSelfStrokeColor] set];
-            for (CGFloat x = width/2 - widthRatio - heightRatio; x < width/2 + widthRatio + heightRatio; x += widthRatio/3) {
-                CGContextMoveToPoint(context, x, y - heightRatio - widthRatio);
-                CGContextAddLineToPoint(context, x, y + heightRatio + widthRatio);
-            }
+        if (self.shading == 2) {    //Draws stripes
+            CGPoint origin = CGPointMake(width/2-widthRatio-heightRatio, y - heightRatio-widthRatio);
+            CGSize size = CGSizeMake((widthRatio+heightRatio)*2, (widthRatio+heightRatio)*2);
+            [self drawStripesWithPath:setSquiggle AtOrigin:origin WithSize:size];
         }
-        
-        CGContextStrokePath(context);
-        CGContextRestoreGState(context);
-        
-        /*if (self.shading == 2) {
-            CGPoint start = CGPointMake(width/2 + widthRatio + heightRatio/2, y + heightRatio*0.707);
-            CGPoint end = CGPointMake(width/2 + widthRatio + heightRatio/2, y - heightRatio*0.707);
-            [setOval moveToPoint:start];
-            [setOval addLineToPoint:end];
-        }*/
         
         return setSquiggle;
         
     }
     return nil;
-    
-    
 }
-
-
-
-
-
-
 
 
 @end

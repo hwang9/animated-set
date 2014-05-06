@@ -17,27 +17,21 @@
 
 @implementation PlayingCardGameViewController
 
-
-- (UIView *) returnBlankButton
-{
-    return [[PlayingCardView alloc] init];
-}
-
 // Overrides the superclass's method by creating an appropriate deck of playing cards.
 - (Deck *)createDeck
 {
     return [[PlayingCardDeck alloc] init];
 }
 
+// Creates a specific button for the Set game
+- (UIView *) returnBlankButton
+{
+    return [[PlayingCardView alloc] init];
+}
+
 - (NSUInteger)numCardsAtStart
 {
     return 16;
-}
-
-// Overrides the superclass's method by providing the correct background images when a card is (un)chosen
-- (UIImage *)backgroundImageForCard:(Card *)card
-{
-    return [UIImage imageNamed:card.isChosen ? @"cardfront" : @"cardback"];
 }
 
 // Overrides the superclass's method by providing the correct values for the card
@@ -46,7 +40,7 @@
     PlayingCardView * currentCardButton = ((PlayingCardView *)cardButton);
     PlayingCard * currentCard = ((PlayingCard *)card);
     
-    
+    //If the button is in play and was just chosen, do a flip animation
     if ([self.game.cardsInPlay containsObject:card] && currentCardButton.faceUp != card.isChosen) {
         [UIView transitionWithView:currentCardButton
                           duration:0.5
@@ -62,6 +56,7 @@
                         }
                         completion:nil];
     }
+    //else, just update the fields and display
     else {
         currentCardButton.rank = currentCard.rank;
         currentCardButton.suit = currentCard.suit;

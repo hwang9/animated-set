@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Henry. All rights reserved.
 //
 
+// This file was essentially taken from lecture. A few lines were added in drawPipsWithHorizontalOffset and drawCorners to make sure hearts and diamonds were drawn in red.
+
 #import "PlayingCardView.h"
 
 @interface PlayingCardView()
@@ -24,18 +26,8 @@
 - (CGFloat)cornerRadius { return CORNER_RADIUS * [self cornerScaleFactor]; }
 - (CGFloat)cornerOffset { return [self cornerRadius] / 3.0;}
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
 
-
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
+// Draws the playing card
 - (void)drawRect:(CGRect)rect
 {
     UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:self.bounds cornerRadius:[self cornerRadius]];
@@ -132,7 +124,14 @@
     CGPoint middle = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
     UIFont *pipFont = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     pipFont = [pipFont fontWithSize:[pipFont pointSize] * self.bounds.size.width * PIP_FONT_SCALE_FACTOR];
-    NSAttributedString *attributedSuit = [[NSAttributedString alloc] initWithString:self.suit attributes:@{ NSFontAttributeName : pipFont }];
+    NSMutableAttributedString *attributedSuit = [[NSMutableAttributedString alloc] initWithString:self.suit attributes:@{ NSFontAttributeName : pipFont }];
+    
+    if ([self.suit isEqualToString:@"♥"] || [self.suit isEqualToString:@"♦"]) {
+        [attributedSuit addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, [attributedSuit.string length])];
+    } else {
+        [attributedSuit addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, [attributedSuit.string length])];
+    }
+    
     CGSize pipSize = [attributedSuit size];
     CGPoint pipOrigin = CGPointMake(
                                     middle.x-pipSize.width/2.0-hoffset*self.bounds.size.width,
@@ -173,9 +172,20 @@
     NSString *rank = [self rankAsString];
     NSString *suit = self.suit;
     
-    NSAttributedString *cornerText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", rank, suit]
-                                                                     attributes:@{ NSParagraphStyleAttributeName : paragraphStyle,
-                                                                                   NSFontAttributeName : cornerFont }];
+    NSMutableAttributedString *cornerText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", rank, suit]
+                                                                                   attributes:@{ NSParagraphStyleAttributeName : paragraphStyle,
+                                                                                                 NSFontAttributeName : cornerFont }];
+    
+    NSRange range;
+    if (self.rank == 10)
+        range = NSMakeRange(2, [cornerText.string length] - 2);
+    else
+        range = NSMakeRange(1, [cornerText.string length]-1);
+    if ([self.suit isEqualToString:@"♥"] || [self.suit isEqualToString:@"♦"]) {
+        [cornerText addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:range];
+    } else {
+        [cornerText addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:range];
+    }
     
     CGRect textBounds;
     textBounds.origin = CGPointMake([self cornerOffset], [self cornerOffset]);

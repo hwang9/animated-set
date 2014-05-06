@@ -90,22 +90,13 @@ static const int COST_TO_CHOOSE = 1;
     }
 }
 
+// Returns the number of cards on the screen
 - (NSUInteger)numCardsOnTable
 {
     return [self.cards count];
 }
 
-// The following methods have not been changed from lecture.
-- (Card *)cardAtIndex:(NSUInteger)index
-{
-    return (index < [self.cards count]) ? self.cards[index] : nil;
-}
-
-- (NSUInteger)indexOfCard:(Card *)card
-{
-    return [self.cards indexOfObject:card];
-}
-
+// Removes the matched cards from the cards array (only used in Set)
 - (void)removeMatchedCards
 {
     for (Card *card in self.cardsInPlay) {
@@ -113,6 +104,7 @@ static const int COST_TO_CHOOSE = 1;
     }
 }
 
+// Draws three cards from deck and add them to cards (only used in Set)
 - (BOOL)drawThreeCards
 {
     for (int i=0; i<3; i++) {
@@ -126,6 +118,16 @@ static const int COST_TO_CHOOSE = 1;
     return TRUE;
 }
 
+// The following methods have not been changed from lecture.
+- (Card *)cardAtIndex:(NSUInteger)index
+{
+    return (index < [self.cards count]) ? self.cards[index] : nil;
+}
+
+- (NSUInteger)indexOfCard:(Card *)card
+{
+    return [self.cards indexOfObject:card];
+}
 
 - (instancetype)initWithCardCount:(NSUInteger)cardCount
                         usingDeck:(Deck *)deck

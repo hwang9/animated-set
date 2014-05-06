@@ -16,16 +16,16 @@
 // abstract methods:
 - (Deck *)createDeck;
 - (NSUInteger)numCardsAtStart;
-- (NSAttributedString *)attTitleForCard:(Card *)card;
-- (UIImage *)backgroundImageForCard:(Card *)card;
+- (UIView *)returnBlankButton;
+- (void)updateButton:(UIView *)cardButton inputCard:(Card *)card;
 
 - (UIView *)addCardButton;
 - (CGRect) getFrameAtIndex:(NSUInteger)index;
 - (void)updateUI;
 
-@property (nonatomic, strong) CardMatchingGame *game;
-@property (weak, nonatomic) IBOutlet UIView *cardsView;
-@property (nonatomic) NSMutableArray *cardButtons;
-@property (nonatomic) BOOL isPile;
+@property (nonatomic, strong) CardMatchingGame *game;    //instance of the model
+@property (weak, nonatomic) IBOutlet UIView *cardsView;  //the view where the buttons will live
+@property (nonatomic) NSMutableArray *cardButtons;       //array of card buttons
+@property (nonatomic) BOOL isPile;                       //true if we currently have a pile
 
 @end
