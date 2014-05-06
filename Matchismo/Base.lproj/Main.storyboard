@@ -13,7 +13,7 @@
                         <viewControllerLayoutGuide type="bottom" id="lQ6-gj-nQF"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="hcy-a4-jdf">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b7w-WL-1Mt">
@@ -75,6 +75,7 @@
                             <constraint firstItem="b7w-WL-1Mt" firstAttribute="top" secondItem="v0I-ez-tcV" secondAttribute="bottom" constant="8" symbolic="YES" id="xSs-5b-2Ax"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" title="SET" id="B5R-aQ-8Kf"/>
                     <navigationItem key="navigationItem" title="SET" id="YQ8-b9-Mhs">
                         <barButtonItem key="rightBarButtonItem" title="History" id="ffb-dB-B9s"/>
@@ -122,10 +123,10 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="USl-Fv-2Y6">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="USl-Fv-2Y6">
                                 <rect key="frame" x="244" y="474" width="48" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Redeal">
@@ -135,7 +136,7 @@
                                     <action selector="touchRedealButton" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dhh-4l-2MG"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q4y-ol-VGh">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q4y-ol-VGh">
                                 <rect key="frame" x="20" y="20" width="280" height="446"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -144,7 +145,7 @@
                                     <outletCollection property="gestureRecognizers" destination="9ie-Hh-CFC" appends="YES" id="PgH-CK-weo"/>
                                 </connections>
                             </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="arl-MX-iqo">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="arl-MX-iqo">
                                 <rect key="frame" x="20" y="474" width="99" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -171,6 +172,7 @@
                             <constraint firstItem="USl-Fv-2Y6" firstAttribute="top" secondItem="Q4y-ol-VGh" secondAttribute="bottom" constant="8" symbolic="YES" id="oeA-6r-rmA"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" title="2-CARD MATCH" id="y1e-xe-QY9"/>
                     <navigationItem key="navigationItem" title="2-CARD MATCH" id="5hu-mu-RE7">
                         <barButtonItem key="rightBarButtonItem" title="History" id="Zcn-fD-5eD"/>
