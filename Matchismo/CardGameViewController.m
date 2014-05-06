@@ -17,8 +17,6 @@
 @interface CardGameViewController ()
 
 
-@property (weak, nonatomic) IBOutlet UIView *cardsView;
-@property (nonatomic) NSMutableArray *cardButtons;
 @property (nonatomic) Grid *cardsGrid;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
@@ -35,7 +33,16 @@
 
 - (NSMutableArray *)cardButtons
 {
-    if (!_cardButtons) _cardButtons = [[NSMutableArray alloc] init];
+    if (!_cardButtons) {
+        _cardButtons = [[NSMutableArray alloc] init];
+        for (int i=0; i<[self numCardsAtStart]; i++) {
+            UIButton *cardButton = [[UIButton alloc] init];
+            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchCardButton:)];
+            [cardButton addGestureRecognizer:tap];
+            [self.cardButtons addObject:cardButton];
+            [self.cardsView addSubview:cardButton];
+        }
+    }
     return _cardButtons;
 }
 
@@ -62,28 +69,30 @@
 
 // This method takes care of the resets needed when the Redeal button is pressed. It reinitializes the game and updates the UI.
 - (IBAction)touchRedealButton {
-    _game = [[CardMatchingGame alloc] initWithCardCount:[self numCardsAtStart] usingDeck:[self createDeck]];
+    //_game = [[CardMatchingGame alloc] initWithCardCount:[self numCardsAtStart] usingDeck:[self createDeck]];
+    for (UIButton *button in self.cardButtons) {
+        [button removeFromSuperview];
+    }
+    self.game = nil;
+    self.cardsGrid = nil;
+    self.cardButtons = nil;
     
     [self updateUI];
     
 }
 - (IBAction)touchCardButton:(UITapGestureRecognizer *)sender
 {
-    //NSUInteger cardIndex = [self.cardButtons indexOfObject:sender];
-    NSUInteger cardIndex = 0;
+    NSUInteger cardIndex = [self.cardButtons indexOfObject:sender.view];
     
     [self.game chooseCardAtIndex:cardIndex];
-    
-    Card *card = [self.game cardAtIndex:cardIndex];
     
     // Updates the UI
     [self updateUI];
     
     if (self.game.shouldMatch) {
         self.game.cardsInPlay = nil;
-        
         if (self.game.matchScore <= 0) {
-            [self.game.cardsInPlay addObject:card];
+            [self.game.cardsInPlay addObject:[self.game cardAtIndex:cardIndex]];
         }
     }
 }
@@ -95,20 +104,17 @@
     NSUInteger rowCount = [self.cardsGrid rowCount];
     NSUInteger colCount = [self.cardsGrid columnCount];
     
-    // Updates every button on the screen
-    for (int i=0; i<[self.game numCardsOnTable]; i++) {
-        UIButton *cardButton = [[UIButton alloc] initWithFrame:CGRectMake([self.cardsGrid frameOfCellAtRow:i/rowCount inColumn:i%colCount].origin.x, [self.cardsGrid frameOfCellAtRow:i/rowCount inColumn:i%colCount].origin.y, [self.cardsGrid cellSize].width, [self.cardsGrid cellSize].height)];
+    for (UIButton *cardButton in self.cardButtons) {
+        NSUInteger cardIndex = [self.cardButtons indexOfObject:cardButton];
+        cardButton.frame = [self.cardsGrid frameOfCellAtRow:cardIndex/rowCount inColumn:cardIndex%colCount];
         
-        Card *card = [self.game cardAtIndex:i];
+        Card *card = [self.game cardAtIndex:cardIndex];
         
         [cardButton setAttributedTitle:[self attTitleForCard:card] forState:UIControlStateNormal];
         
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         
         cardButton.enabled = card.isMatched ? NO : YES;
-        
-        [self.cardButtons addObject:cardButton];
-        [self.cardsView addSubview:cardButton];
     }
     
     // Updates scoreLabel

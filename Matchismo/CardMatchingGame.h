@@ -18,7 +18,10 @@
 // The following two public method signatures are unchanged from lecture.
 - (void)chooseCardAtIndex:(NSUInteger)index;
 - (Card *)cardAtIndex:(NSUInteger)index;
+
 - (NSUInteger)numCardsOnTable;
+- (NSUInteger)indexOfCard:(Card *)card;
+- (void)removeMatchedCards;
 
 // Keeps track of the overall score
 @property (nonatomic, readonly) int gameScore;

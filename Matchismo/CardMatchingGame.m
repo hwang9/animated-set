@@ -101,6 +101,18 @@ static const int COST_TO_CHOOSE = 1;
     return (index < [self.cards count]) ? self.cards[index] : nil;
 }
 
+- (NSUInteger)indexOfCard:(Card *)card
+{
+    return [self.cards indexOfObject:card];
+}
+
+- (void)removeMatchedCards
+{
+    for (Card *card in self.cardsInPlay) {
+        [self.cards removeObject:card];
+    }
+}
+
 
 - (instancetype)initWithCardCount:(NSUInteger)cardCount
                         usingDeck:(Deck *)deck

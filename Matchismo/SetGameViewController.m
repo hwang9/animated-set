@@ -88,5 +88,24 @@
     return [UIImage imageNamed:card.isChosen ? @"cardfronttint" : @"cardfront"];
 }
 
+- (void)updateUI
+{
+    if(self.game.shouldMatch && self.game.matchScore > 0) {
+        NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
+        for (Card *card in self.game.cardsInPlay) {
+            [indexSet addIndex:[self.game indexOfCard:card]];
+            [[self.cardButtons objectAtIndex:[self.game indexOfCard:card]]removeFromSuperview];
+        }
+        [self.cardButtons removeObjectsAtIndexes:indexSet];
+        [self.game removeMatchedCards];
+    }
+    [super updateUI];
+}
+
+- (void)removeFromPlay:(UIButton *)cardButton
+{
+    [self.cardButtons removeObject:cardButton];
+}
+
 
 @end
