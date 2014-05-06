@@ -17,6 +17,7 @@
 @implementation SetGameViewController
 
 
+
 // Override the superclass's method by calling alloc/init on the proper deck
 - (Deck *)createDeck
 {
@@ -93,18 +94,19 @@
     if(self.game.shouldMatch && self.game.matchScore > 0) {
         NSMutableIndexSet *indexSet = [[NSMutableIndexSet alloc] init];
         for (Card *card in self.game.cardsInPlay) {
-            [indexSet addIndex:[self.game indexOfCard:card]];
-            [[self.cardButtons objectAtIndex:[self.game indexOfCard:card]]removeFromSuperview];
+            NSUInteger cardIndex = [self.game indexOfCard:card];
+            __block UIButton *button = [self.cardButtons objectAtIndex:cardIndex];
+            [indexSet addIndex:cardIndex];
+            [UIView transitionWithView:button duration:1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                button.frame = CGRectMake(0, 0, 0, 0);
+            } completion:^(BOOL finished) {
+                if(finished) [button removeFromSuperview];
+            }];
         }
         [self.cardButtons removeObjectsAtIndexes:indexSet];
         [self.game removeMatchedCards];
     }
     [super updateUI];
-}
-
-- (void)removeFromPlay:(UIButton *)cardButton
-{
-    [self.cardButtons removeObject:cardButton];
 }
 
 
@@ -113,7 +115,12 @@
         sender.userInteractionEnabled = NO;
     else {
         for (int i=0; i < 3; i++) {
-            [self addCardButton];
+            __block UIButton *button = [self addCardButton];
+            [UIView transitionWithView:button duration:1.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+                
+            } completion:^(BOOL finished) {
+                if(finished) [self.cardsView addSubview:button];
+            }];
         }
     }
     [self updateUI];

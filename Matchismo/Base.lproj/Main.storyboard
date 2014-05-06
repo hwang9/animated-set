@@ -40,9 +40,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="jAX-1M-fg3" appends="YES" id="45X-Pb-W1W"/>
-                                </connections>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uzq-tl-VWU">
                                 <rect key="frame" x="115" y="474" width="90" height="30"/>
@@ -70,11 +67,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FWU-GT-Sla" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="jAX-1M-fg3">
-                    <connections>
-                        <action selector="touchCardButton:" destination="q8l-YV-QRb" id="cPc-Ik-yvX"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="86" y="-759"/>
         </scene>
@@ -131,9 +123,6 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="geJ-yn-KoP" appends="YES" id="uwv-9j-PGU"/>
-                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.60559555476871219" green="1" blue="0.11959488094700355" alpha="1" colorSpace="calibratedRGB"/>
@@ -149,11 +138,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="geJ-yn-KoP">
-                    <connections>
-                        <action selector="touchCardButton:" destination="vXZ-lx-hvc" id="uO5-Rm-0vC"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="86" y="-92"/>
         </scene>

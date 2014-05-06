@@ -19,7 +19,7 @@
 - (NSAttributedString *)attTitleForCard:(Card *)card;
 - (UIImage *)backgroundImageForCard:(Card *)card;
 
-- (void)addCardButton;
+- (UIButton *)addCardButton;
 - (void)updateUI;
 
 @property (nonatomic, strong) CardMatchingGame *game;
