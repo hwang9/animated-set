@@ -26,5 +26,6 @@
 @property (nonatomic, strong) CardMatchingGame *game;
 @property (nonatomic) NSMutableArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UIView *cardsView;
+@property (nonatomic) BOOL isPile;
 
 @end

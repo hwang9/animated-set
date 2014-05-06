@@ -14,7 +14,11 @@
 #import "CardGameViewController.h"
 #import "Grid.h"
 
-@interface CardGameViewController ()
+@interface CardGameViewController () <UIDynamicAnimatorDelegate>
+
+@property (strong, nonatomic) UIDynamicAnimator *animator;
+@property (strong, nonatomic) UIAttachmentBehavior *attachment;
+@property (strong, nonatomic) UIButton *pile;
 
 
 @property (nonatomic) Grid *cardsGrid;
@@ -29,6 +33,24 @@
 - (void)viewDidLoad
 {
     [self updateUI];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [self updateUI];
+}
+
+- (UIDynamicAnimator *)animator
+{
+    if (!_animator) {
+        if (self.cardsView) {
+            _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.cardsView];
+            _animator.delegate = self;
+        } else {
+            NSLog(@"Tried to create an animator with no reference view.");
+        }
+    }
+    return _animator;
 }
 
 - (UIButton *)addCardButton
@@ -62,6 +84,18 @@
     return _cardsGrid;
 }
 
+- (UIView *)pile
+{
+    if (!_pile) {
+        _pile = [[UIButton alloc] init];
+        UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        [_pile addGestureRecognizer:panGesture];
+        [_pile addGestureRecognizer:tapGesture];
+    }
+    return _pile;
+}
+
 
 // Simple getter for the game property that includes lazy instantiation.
 - (CardMatchingGame *)game
@@ -74,9 +108,9 @@
 
 // This method takes care of the resets needed when the Redeal button is pressed. It reinitializes the game and updates the UI.
 - (IBAction)touchRedealButton {
-    //_game = [[CardMatchingGame alloc] initWithCardCount:[self numCardsAtStart] usingDeck:[self createDeck]];
+    if (self.isPile) return;
     for (UIButton *button in self.cardButtons) {
-        [UIView transitionWithView:button duration:1.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [UIView transitionWithView:button duration:0.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
             button.frame = CGRectMake(0, 0, 0, 0);
         } completion:^(BOOL finished){
             [button removeFromSuperview];
@@ -109,9 +143,9 @@
 - (CGRect)getFrameAtIndex:(NSUInteger)index
 {
     self.cardsGrid.minimumNumberOfCells = [self.game numCardsOnTable];
-    NSUInteger rowCount = [self.cardsGrid rowCount];
+    self.cardsGrid.size = self.cardsView.bounds.size;
     NSUInteger colCount = [self.cardsGrid columnCount];
-    return [self.cardsGrid frameOfCellAtRow:index/rowCount inColumn:index%colCount];
+    return [self.cardsGrid frameOfCellAtRow:index/colCount inColumn:index%colCount];
 }
 
 // This method updates the UI and returns a boolean value to let the touchCardButton method know whether it should keep the most recent card or not.
@@ -119,8 +153,7 @@
 {
     for (UIButton *cardButton in self.cardButtons) {
         NSUInteger cardIndex = [self.cardButtons indexOfObject:cardButton];
-        //cardButton.frame = [self getFrameAtIndex:cardIndex];
-        [UIView transitionWithView:cardButton duration:1.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [UIView transitionWithView:cardButton duration:0.5 options:UIViewAnimationOptionCurveEaseIn animations:^{
             cardButton.frame = [self getFrameAtIndex:cardIndex];
         } completion:nil];
         
@@ -137,6 +170,79 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"Score :%d", self.game.gameScore];
 }
 
+- (IBAction)combineCardsOnPinch:(UIPinchGestureRecognizer *)sender {
+    
+    self.isPile = TRUE;
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        __block CGPoint center = [self.cardsView center];
+        __block NSUInteger width = 60;
+        __block NSUInteger height = 90;
+        for (UIButton *button in self.cardButtons) {
+            width = button.frame.size.width;
+            height = button.frame.size.height;
+            [UIView transitionWithView:button duration:0.3 options:UIViewAnimationOptionCurveLinear animations:^{
+                button.frame = CGRectMake(center.x - width/2, center.y - height/2, width, height);
+            }completion:^(BOOL finished){
+                if (finished) [button removeFromSuperview];
+            }];
+        }
+        self.pile.frame = CGRectMake(center.x - width/2, center.y - height/2, width, height);
+        
+        Card *card = [self.game cardAtIndex:0];
+        
+        [self.pile setAttributedTitle:[self attTitleForCard:card] forState:UIControlStateNormal];
+        
+        [self.pile setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
+        [self.cardsView addSubview:self.pile];
+    }
+}
+
+
+- (IBAction)handlePanGesture:(UIPanGestureRecognizer *)sender
+{
+    CGPoint panPoint = [sender locationInView:self.cardsView];
+    
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        [self attachPileToPoint:panPoint];
+    } else if (sender.state == UIGestureRecognizerStateChanged) {
+        self.attachment.anchorPoint = panPoint;
+    } else if (sender.state == UIGestureRecognizerStateEnded) {
+        [self.animator removeBehavior:self.attachment];
+        //self.cardsView.path = nil;
+    }
+}
+
+- (void)attachPileToPoint:(CGPoint)anchorPoint
+{
+    if (self.pile) {
+        self.attachment = [[UIAttachmentBehavior alloc] initWithItem:self.pile attachedToAnchor:anchorPoint];
+        UIView *pile = self.pile;
+        //self.pile = nil;
+        __weak CardGameViewController *weakSelf = self;
+        self.attachment.action = ^{
+            UIBezierPath *path = [[UIBezierPath alloc] init];
+            [path moveToPoint:weakSelf.attachment.anchorPoint];
+            [path addLineToPoint:pile.center];
+            //weakSelf.cardsView.path = path;
+        };
+        [self.animator addBehavior:self.attachment];
+    }
+}
+
+- (IBAction)handleTapGesture:(UITapGestureRecognizer *)sender
+{
+    CGPoint origin = self.pile.frame.origin;
+    NSUInteger width = self.pile.frame.size.width;
+    NSUInteger height = self.pile.frame.size.height;
+    for (UIButton *button in self.cardButtons) {
+        button.frame = CGRectMake(origin.x, origin.y, width, height);
+        [self.cardsView addSubview:button];
+    }
+    [self.pile removeFromSuperview];
+    self.pile = nil;
+    self.isPile = FALSE;
+    [self updateUI];
+}
 
 // Different games have different decks. Keep this abstract.
 - (Deck *)createDeck

@@ -97,7 +97,7 @@
             NSUInteger cardIndex = [self.game indexOfCard:card];
             __block UIButton *button = [self.cardButtons objectAtIndex:cardIndex];
             [indexSet addIndex:cardIndex];
-            [UIView transitionWithView:button duration:1.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            [UIView transitionWithView:button duration:0.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
                 button.frame = CGRectMake(0, 0, 0, 0);
             } completion:^(BOOL finished) {
                 if(finished) [button removeFromSuperview];
@@ -111,13 +111,13 @@
 
 
 - (IBAction)addThreeCards:(UIButton *)sender {
-    if (![self.game drawThreeCards])
-        sender.userInteractionEnabled = NO;
+    if (self.isPile || ![self.game drawThreeCards])
+        return;
     else {
         for (int i=0; i < 3; i++) {
             __block UIButton *button = [self addCardButton];
             [self.cardsView addSubview:button];
-            [UIView transitionWithView:button duration:1.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [UIView transitionWithView:button duration:0.5 options:UIViewAnimationOptionCurveEaseIn animations:^{
                 button.frame = [self getFrameAtIndex:([self.cardButtons count] - 1)];
             } completion:nil];
         }
