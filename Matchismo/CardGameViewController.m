@@ -178,12 +178,6 @@
         [self updateButton:cardButton inputCard:card];
         
         if (card.isMatched) cardButton.gestureRecognizers = nil;
-        
-        //[cardButton setAttributedTitle:[self attTitleForCard:card] forState:UIControlStateNormal];
-        
-        //[cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
-        
-        //cardButton.enabled = card.isMatched ? NO : YES;
     }
     
     // Updates scoreLabel

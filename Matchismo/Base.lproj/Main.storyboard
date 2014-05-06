@@ -126,7 +126,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="USl-Fv-2Y6">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="USl-Fv-2Y6">
                                 <rect key="frame" x="244" y="474" width="48" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Redeal">
@@ -136,7 +136,7 @@
                                     <action selector="touchRedealButton" destination="vXZ-lx-hvc" eventType="touchUpInside" id="dhh-4l-2MG"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q4y-ol-VGh">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Q4y-ol-VGh">
                                 <rect key="frame" x="20" y="20" width="280" height="446"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -145,11 +145,11 @@
                                     <outletCollection property="gestureRecognizers" destination="9ie-Hh-CFC" appends="YES" id="PgH-CK-weo"/>
                                 </connections>
                             </view>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="arl-MX-iqo">
-                                <rect key="frame" x="20" y="474" width="99" height="30"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="arl-MX-iqo">
+                                <rect key="frame" x="20" y="471" width="99" height="33"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="99" id="IRV-tI-SI7"/>
+                                    <constraint firstAttribute="width" constant="99" id="ggE-fh-CKN"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -158,18 +158,15 @@
                         </subviews>
                         <color key="backgroundColor" red="0.60559555476871219" green="1" blue="0.11959488094700355" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="Q4y-ol-VGh" secondAttribute="trailing" constant="20" symbolic="YES" id="A5L-5S-kdj"/>
-                            <constraint firstItem="arl-MX-iqo" firstAttribute="top" secondItem="Q4y-ol-VGh" secondAttribute="bottom" constant="8" symbolic="YES" id="Hsf-rW-usE"/>
-                            <constraint firstAttribute="bottom" secondItem="Q4y-ol-VGh" secondAttribute="bottom" constant="102" id="Qeu-CC-RYk"/>
-                            <constraint firstAttribute="centerY" secondItem="Q4y-ol-VGh" secondAttribute="centerY" constant="41" id="bKp-Gm-mLd"/>
-                            <constraint firstAttribute="trailing" secondItem="USl-Fv-2Y6" secondAttribute="trailing" constant="28" id="bmb-Re-cSK"/>
-                            <constraint firstAttribute="centerY" secondItem="Q4y-ol-VGh" secondAttribute="centerY" constant="41" id="cTn-xm-Z1r"/>
-                            <constraint firstItem="Q4y-ol-VGh" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="20" symbolic="YES" id="fOB-bU-6Ou"/>
-                            <constraint firstItem="Q4y-ol-VGh" firstAttribute="leading" secondItem="arl-MX-iqo" secondAttribute="leading" id="gB5-oW-iD6"/>
-                            <constraint firstItem="arl-MX-iqo" firstAttribute="bottom" secondItem="USl-Fv-2Y6" secondAttribute="bottom" id="gI6-wC-yBB"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="arl-MX-iqo" secondAttribute="bottom" constant="15" id="lVL-56-dN9"/>
-                            <constraint firstItem="arl-MX-iqo" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="mRM-IM-OiK"/>
-                            <constraint firstItem="USl-Fv-2Y6" firstAttribute="top" secondItem="Q4y-ol-VGh" secondAttribute="bottom" constant="8" symbolic="YES" id="oeA-6r-rmA"/>
+                            <constraint firstAttribute="trailing" secondItem="Q4y-ol-VGh" secondAttribute="trailing" constant="20" symbolic="YES" id="2PO-Ue-sAJ"/>
+                            <constraint firstAttribute="trailing" secondItem="USl-Fv-2Y6" secondAttribute="trailing" constant="28" id="8W2-Nm-OTU"/>
+                            <constraint firstItem="arl-MX-iqo" firstAttribute="leading" secondItem="Q4y-ol-VGh" secondAttribute="leading" id="DzG-xK-0Ga"/>
+                            <constraint firstItem="Q4y-ol-VGh" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" symbolic="YES" id="ITM-M3-eVR"/>
+                            <constraint firstItem="arl-MX-iqo" firstAttribute="top" secondItem="Q4y-ol-VGh" secondAttribute="bottom" constant="5" id="Rkl-pf-POL"/>
+                            <constraint firstAttribute="bottom" secondItem="Q4y-ol-VGh" secondAttribute="bottom" constant="53" id="lD5-GG-WRv"/>
+                            <constraint firstItem="Q4y-ol-VGh" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="20" symbolic="YES" id="mXD-kr-OpX"/>
+                            <constraint firstItem="USl-Fv-2Y6" firstAttribute="bottom" secondItem="arl-MX-iqo" secondAttribute="bottom" id="vgM-N9-SXt"/>
+                            <constraint firstItem="USl-Fv-2Y6" firstAttribute="top" secondItem="Q4y-ol-VGh" secondAttribute="bottom" constant="8" symbolic="YES" id="xdH-K0-chx"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>

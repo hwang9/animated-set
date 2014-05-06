@@ -34,38 +34,6 @@
     return 16;
 }
 
-// Overrides the superclass's method by only presenting the card contents when the card is faceup (chosen). Returns an empty string otherwise.
-/*- (NSAttributedString *)attTitleForCard:(Card *)card
-{
-    if (card.isChosen)
-        return [self buildCardAttString:card];
-    else
-        return [[NSAttributedString alloc] initWithString:@""];
-}*/
-
-// Builds an appropriate title for a playing card. An NSAttributedString is used to ensure that the suits reflect their appropriate colors (hearts and diamonds are red, while clubs and spades are black)
-/*- (NSAttributedString *)buildCardAttString:(Card *)card
-{
-    NSMutableAttributedString *ret;
-    
-    ret = [[NSMutableAttributedString alloc] initWithString:card.contents attributes:@{NSForegroundColorAttributeName:[UIColor blackColor]}];
-    if ([card isKindOfClass:[PlayingCard class]]) {
-        PlayingCard *playingCard = (PlayingCard *)card;
-        NSRange range;
-        if (playingCard.rank == 10)
-            range = NSMakeRange(2, [card.contents length]-2);
-        else
-            range = NSMakeRange(1, [card.contents length]-1);
-        if ([playingCard.suit isEqualToString:@"♥"] || [playingCard.suit isEqualToString:@"♦"]) {
-            [ret addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:range];
-        } else {
-            [ret addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:range];
-        }
-    }
-    
-    return ret;
-}*/
-
 // Overrides the superclass's method by providing the correct background images when a card is (un)chosen
 - (UIImage *)backgroundImageForCard:(Card *)card
 {
@@ -77,13 +45,32 @@
 {
     PlayingCardView * currentCardButton = ((PlayingCardView *)cardButton);
     PlayingCard * currentCard = ((PlayingCard *)card);
-    currentCardButton.rank = currentCard.rank;
-    currentCardButton.suit = currentCard.suit;
-    currentCardButton.faceUp = card.isChosen;
     
-    if (card.isMatched) cardButton.alpha = 0.4;
     
-    [currentCardButton setNeedsDisplay];
+    if ([self.game.cardsInPlay containsObject:card] && currentCardButton.faceUp != card.isChosen) {
+        [UIView transitionWithView:currentCardButton
+                          duration:0.5
+                           options:UIViewAnimationOptionTransitionFlipFromRight
+                        animations:^{
+                            currentCardButton.rank = currentCard.rank;
+                            currentCardButton.suit = currentCard.suit;
+                            currentCardButton.faceUp = card.isChosen;
+                            
+                            if (card.isMatched) cardButton.alpha = 0.4;
+                            
+                            [currentCardButton setNeedsDisplay];
+                        }
+                        completion:nil];
+    }
+    else {
+        currentCardButton.rank = currentCard.rank;
+        currentCardButton.suit = currentCard.suit;
+        currentCardButton.faceUp = card.isChosen;
+        
+        if (card.isMatched) cardButton.alpha = 0.4;
+        
+        [currentCardButton setNeedsDisplay];
+    }
 }
 
 @end
