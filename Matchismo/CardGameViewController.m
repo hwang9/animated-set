@@ -33,7 +33,7 @@
 
 - (UIButton *)addCardButton
 {
-    UIButton *cardButton = [[UIButton alloc] init];
+    UIButton *cardButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchCardButton:)];
     [cardButton addGestureRecognizer:tap];
     [self.cardButtons addObject:cardButton];
@@ -76,7 +76,11 @@
 - (IBAction)touchRedealButton {
     //_game = [[CardMatchingGame alloc] initWithCardCount:[self numCardsAtStart] usingDeck:[self createDeck]];
     for (UIButton *button in self.cardButtons) {
-        [button removeFromSuperview];
+        [UIView transitionWithView:button duration:1.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            button.frame = CGRectMake(0, 0, 0, 0);
+        } completion:^(BOOL finished){
+            [button removeFromSuperview];
+        }];
     }
     self.game = nil;
     self.cardsGrid = nil;
@@ -102,16 +106,23 @@
     }
 }
 
-// This method updates the UI and returns a boolean value to let the touchCardButton method know whether it should keep the most recent card or not.
-- (void)updateUI
+- (CGRect)getFrameAtIndex:(NSUInteger)index
 {
     self.cardsGrid.minimumNumberOfCells = [self.game numCardsOnTable];
     NSUInteger rowCount = [self.cardsGrid rowCount];
     NSUInteger colCount = [self.cardsGrid columnCount];
-    
+    return [self.cardsGrid frameOfCellAtRow:index/rowCount inColumn:index%colCount];
+}
+
+// This method updates the UI and returns a boolean value to let the touchCardButton method know whether it should keep the most recent card or not.
+- (void)updateUI
+{
     for (UIButton *cardButton in self.cardButtons) {
         NSUInteger cardIndex = [self.cardButtons indexOfObject:cardButton];
-        cardButton.frame = [self.cardsGrid frameOfCellAtRow:cardIndex/rowCount inColumn:cardIndex%colCount];
+        //cardButton.frame = [self getFrameAtIndex:cardIndex];
+        [UIView transitionWithView:cardButton duration:1.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            cardButton.frame = [self getFrameAtIndex:cardIndex];
+        } completion:nil];
         
         Card *card = [self.game cardAtIndex:cardIndex];
         

@@ -20,6 +20,7 @@
 - (UIImage *)backgroundImageForCard:(Card *)card;
 
 - (UIButton *)addCardButton;
+- (CGRect) getFrameAtIndex:(NSUInteger)index;
 - (void)updateUI;
 
 @property (nonatomic, strong) CardMatchingGame *game;

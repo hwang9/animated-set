@@ -116,14 +116,13 @@
     else {
         for (int i=0; i < 3; i++) {
             __block UIButton *button = [self addCardButton];
+            [self.cardsView addSubview:button];
             [UIView transitionWithView:button duration:1.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-                
-            } completion:^(BOOL finished) {
-                if(finished) [self.cardsView addSubview:button];
-            }];
+                button.frame = [self getFrameAtIndex:([self.cardButtons count] - 1)];
+            } completion:nil];
         }
     }
-    [self updateUI];
+    [super updateUI];
 }
 
 
