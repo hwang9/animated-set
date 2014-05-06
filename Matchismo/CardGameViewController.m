@@ -18,10 +18,10 @@
 
 @property (strong, nonatomic) UIDynamicAnimator *animator;
 @property (strong, nonatomic) UIAttachmentBehavior *attachment;
-@property (strong, nonatomic) UIButton *pile;
 
 
 @property (nonatomic) Grid *cardsGrid;
+@property (nonatomic) UIView *pile;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
 @end
@@ -53,13 +53,33 @@
     return _animator;
 }
 
-- (UIButton *)addCardButton
+- (UIView *)addCardButton
 {
-    UIButton *cardButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    //UIButton *cardButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    UIView *cardButton = [self returnBlankButton];
+    cardButton.frame = CGRectMake(0, 0, 0, 0);
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchCardButton:)];
     [cardButton addGestureRecognizer:tap];
     [self.cardButtons addObject:cardButton];
     return cardButton;
+}
+
+- (UIView *) returnBlankButton
+{
+    return nil;
+}
+
+
+- (UIView *)pile
+{
+    if (!_pile) {
+        _pile = [self returnBlankButton];
+        UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        [_pile addGestureRecognizer:panGesture];
+        [_pile addGestureRecognizer:tapGesture];
+    }
+    return _pile;
 }
 
 - (NSMutableArray *)cardButtons
@@ -84,16 +104,12 @@
     return _cardsGrid;
 }
 
-- (UIView *)pile
+- (void)addGestures:(UIView *)pile
 {
-    if (!_pile) {
-        _pile = [[UIButton alloc] init];
-        UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-        [_pile addGestureRecognizer:panGesture];
-        [_pile addGestureRecognizer:tapGesture];
-    }
-    return _pile;
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    [pile addGestureRecognizer:panGesture];
+    [pile addGestureRecognizer:tapGesture];
 }
 
 
@@ -109,7 +125,7 @@
 // This method takes care of the resets needed when the Redeal button is pressed. It reinitializes the game and updates the UI.
 - (IBAction)touchRedealButton {
     if (self.isPile) return;
-    for (UIButton *button in self.cardButtons) {
+    for (UIView *button in self.cardButtons) {
         [UIView transitionWithView:button duration:0.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
             button.frame = CGRectMake(0, 0, 0, 0);
         } completion:^(BOOL finished){
@@ -151,7 +167,7 @@
 // This method updates the UI and returns a boolean value to let the touchCardButton method know whether it should keep the most recent card or not.
 - (void)updateUI
 {
-    for (UIButton *cardButton in self.cardButtons) {
+    for (UIView *cardButton in self.cardButtons) {
         NSUInteger cardIndex = [self.cardButtons indexOfObject:cardButton];
         [UIView transitionWithView:cardButton duration:0.5 options:UIViewAnimationOptionCurveEaseIn animations:^{
             cardButton.frame = [self getFrameAtIndex:cardIndex];
@@ -159,15 +175,23 @@
         
         Card *card = [self.game cardAtIndex:cardIndex];
         
-        [cardButton setAttributedTitle:[self attTitleForCard:card] forState:UIControlStateNormal];
+        [self updateButton:cardButton inputCard:card];
         
-        [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
+        if (card.isMatched) cardButton.gestureRecognizers = nil;
         
-        cardButton.enabled = card.isMatched ? NO : YES;
+        //[cardButton setAttributedTitle:[self attTitleForCard:card] forState:UIControlStateNormal];
+        
+        //[cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
+        
+        //cardButton.enabled = card.isMatched ? NO : YES;
     }
     
     // Updates scoreLabel
     self.scoreLabel.text = [NSString stringWithFormat:@"Score :%d", self.game.gameScore];
+}
+
+- (void)updateButton:(UIView *)cardButton inputCard:(Card *)card
+{
 }
 
 - (IBAction)combineCardsOnPinch:(UIPinchGestureRecognizer *)sender {
@@ -177,7 +201,7 @@
         __block CGPoint center = [self.cardsView center];
         __block NSUInteger width = 60;
         __block NSUInteger height = 90;
-        for (UIButton *button in self.cardButtons) {
+        for (UIView *button in self.cardButtons) {
             width = button.frame.size.width;
             height = button.frame.size.height;
             [UIView transitionWithView:button duration:0.3 options:UIViewAnimationOptionCurveLinear animations:^{
@@ -190,9 +214,11 @@
         
         Card *card = [self.game cardAtIndex:0];
         
-        [self.pile setAttributedTitle:[self attTitleForCard:card] forState:UIControlStateNormal];
+        [self updateButton:self.pile inputCard:card];
         
-        [self.pile setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
+        //[self.pile setAttributedTitle:[self attTitleForCard:card] forState:UIControlStateNormal];
+        
+        //[self.pile setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         [self.cardsView addSubview:self.pile];
     }
 }
@@ -234,7 +260,7 @@
     CGPoint origin = self.pile.frame.origin;
     NSUInteger width = self.pile.frame.size.width;
     NSUInteger height = self.pile.frame.size.height;
-    for (UIButton *button in self.cardButtons) {
+    for (UIView *button in self.cardButtons) {
         button.frame = CGRectMake(origin.x, origin.y, width, height);
         [self.cardsView addSubview:button];
     }

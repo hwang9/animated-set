@@ -24,6 +24,11 @@
     return [[SetDeck alloc] init];
 }
 
+- (UIView *) returnBlankButton
+{
+    return [[UIButton alloc] init];
+}
+
 - (NSUInteger)numCardsAtStart
 {
     return 12;

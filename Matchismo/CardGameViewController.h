@@ -19,7 +19,7 @@
 - (NSAttributedString *)attTitleForCard:(Card *)card;
 - (UIImage *)backgroundImageForCard:(Card *)card;
 
-- (UIButton *)addCardButton;
+- (UIView *)addCardButton;
 - (CGRect) getFrameAtIndex:(NSUInteger)index;
 - (void)updateUI;
 

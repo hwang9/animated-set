@@ -9,6 +9,7 @@
 #import "PlayingCardGameViewController.h"
 #import "PlayingCardDeck.h"
 #import "PlayingCard.h"
+#import "PlayingCardView.h"
 
 @interface PlayingCardGameViewController ()
 
@@ -16,6 +17,11 @@
 
 @implementation PlayingCardGameViewController
 
+
+- (UIView *) returnBlankButton
+{
+    return [[PlayingCardView alloc] init];
+}
 
 // Overrides the superclass's method by creating an appropriate deck of playing cards.
 - (Deck *)createDeck
@@ -29,16 +35,16 @@
 }
 
 // Overrides the superclass's method by only presenting the card contents when the card is faceup (chosen). Returns an empty string otherwise.
-- (NSAttributedString *)attTitleForCard:(Card *)card
+/*- (NSAttributedString *)attTitleForCard:(Card *)card
 {
     if (card.isChosen)
         return [self buildCardAttString:card];
     else
         return [[NSAttributedString alloc] initWithString:@""];
-}
+}*/
 
 // Builds an appropriate title for a playing card. An NSAttributedString is used to ensure that the suits reflect their appropriate colors (hearts and diamonds are red, while clubs and spades are black)
-- (NSAttributedString *)buildCardAttString:(Card *)card
+/*- (NSAttributedString *)buildCardAttString:(Card *)card
 {
     NSMutableAttributedString *ret;
     
@@ -58,7 +64,7 @@
     }
     
     return ret;
-}
+}*/
 
 // Overrides the superclass's method by providing the correct background images when a card is (un)chosen
 - (UIImage *)backgroundImageForCard:(Card *)card
@@ -66,5 +72,18 @@
     return [UIImage imageNamed:card.isChosen ? @"cardfront" : @"cardback"];
 }
 
+// Overrides the superclass's method by providing the correct values for the card
+- (void)updateButton:(UIView *)cardButton inputCard:(Card *)card
+{
+    PlayingCardView * currentCardButton = ((PlayingCardView *)cardButton);
+    PlayingCard * currentCard = ((PlayingCard *)card);
+    currentCardButton.rank = currentCard.rank;
+    currentCardButton.suit = currentCard.suit;
+    currentCardButton.faceUp = card.isChosen;
+    
+    if (card.isMatched) cardButton.alpha = 0.4;
+    
+    [currentCardButton setNeedsDisplay];
+}
 
 @end
