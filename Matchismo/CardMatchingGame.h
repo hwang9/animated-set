@@ -22,6 +22,7 @@
 - (NSUInteger)numCardsOnTable;
 - (NSUInteger)indexOfCard:(Card *)card;
 - (void)removeMatchedCards;
+- (BOOL)drawThreeCards;
 
 // Keeps track of the overall score
 @property (nonatomic, readonly) int gameScore;

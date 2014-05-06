@@ -113,6 +113,19 @@ static const int COST_TO_CHOOSE = 1;
     }
 }
 
+- (BOOL)drawThreeCards
+{
+    for (int i=0; i<3; i++) {
+        Card *card = [self.deck drawRandomCard];
+        if (card) {
+            [self.cards addObject:card];
+        } else {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
 
 - (instancetype)initWithCardCount:(NSUInteger)cardCount
                         usingDeck:(Deck *)deck

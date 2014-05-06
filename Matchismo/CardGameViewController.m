@@ -31,16 +31,21 @@
     [self updateUI];
 }
 
+- (void)addCardButton
+{
+    UIButton *cardButton = [[UIButton alloc] init];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchCardButton:)];
+    [cardButton addGestureRecognizer:tap];
+    [self.cardButtons addObject:cardButton];
+    [self.cardsView addSubview:cardButton];
+}
+
 - (NSMutableArray *)cardButtons
 {
     if (!_cardButtons) {
         _cardButtons = [[NSMutableArray alloc] init];
         for (int i=0; i<[self numCardsAtStart]; i++) {
-            UIButton *cardButton = [[UIButton alloc] init];
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchCardButton:)];
-            [cardButton addGestureRecognizer:tap];
-            [self.cardButtons addObject:cardButton];
-            [self.cardsView addSubview:cardButton];
+            [self addCardButton];
         }
     }
     return _cardButtons;

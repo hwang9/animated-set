@@ -108,4 +108,16 @@
 }
 
 
+- (IBAction)addThreeCards:(UIButton *)sender {
+    if (![self.game drawThreeCards])
+        sender.userInteractionEnabled = NO;
+    else {
+        for (int i=0; i < 3; i++) {
+            [self addCardButton];
+        }
+    }
+    [self updateUI];
+}
+
+
 @end
